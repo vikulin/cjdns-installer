@@ -7,7 +7,7 @@
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "sidebar.bmp"
 
 !define PRODUCT_NAME "CJDNS for Windows"
-!define PRODUCT_VERSION "0.9-proto20.3"
+!define PRODUCT_VERSION "0.10-proto20.2"
 !define PRODUCT_PUBLISHER "Santa Cruz Meshnet Project"
 
 # NSIS Dependencies
@@ -137,9 +137,9 @@ Section "Install cjdns"
 
 	# Register with add/remove programs
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "DisplayName" "${PRODUCT_NAME}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "Publisher" "${PRODUCT_PUBLISHER}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "DisplayVersion" "${PRODUCT_VERSION}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "DisplayIcon" "$INSTDIR\logo.ico"
 SectionEnd
 
 Section "Add public peers when generating config"
