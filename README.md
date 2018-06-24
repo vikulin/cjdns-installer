@@ -18,7 +18,7 @@ To rebuild CjdnsService, you should probably use [SharpDevelop](http://www.icsha
 
 ## Installation Dependencies
 
-The installer should run just fine on Windows 7 x64. Nothing else has been tested.
+The installer should run just fine on Windows 7 and Windows 10 x64. Nothing else has been tested.
 
 The CjdnsService component requires .NET 2 or later in order to work.
 
