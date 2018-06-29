@@ -6,8 +6,9 @@
 !define MUI_UNICON "installation/logo.ico"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "sidebar.bmp"
 
-!define PRODUCT_NAME "CJDNS for Windows"
-!define PRODUCT_VERSION "0.10-proto20.2"
+!define PRODUCT_NAME "CJDNS"
+!define PRODUCT_SHORT_NAME "CJDNS"
+!define PRODUCT_VERSION "1.0.1-proto20.4"
 !define PRODUCT_PUBLISHER "Santa Cruz Meshnet Project"
 
 # NSIS Dependencies
@@ -97,7 +98,10 @@ Section "Install cjdns"
 	File "installation\sybilsim.exe"
 	File "installation\genconf.cmd"
 	File "installation\logo.ico"
-
+	File "installation\cjdns.exe"
+	File "installation\service_controller.exe"
+	File "installation\Newtonsoft.Json.dll"
+	
 	# create the uninstaller
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 
@@ -107,6 +111,7 @@ Section "Install cjdns"
 	# Add a shortcut to the uninstaller
 	CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
 	CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall cjdns.lnk" "$INSTDIR\uninstall.exe"
+	CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "$INSTDIR\cjdns.exe"
 
 	# Add a tool and shortcut to edit the config
 	File "installation\edit_config.cmd"
@@ -137,9 +142,11 @@ Section "Install cjdns"
 
 	# Register with add/remove programs
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "DisplayName" "${PRODUCT_NAME}"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "Publisher" "${PRODUCT_PUBLISHER}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "DisplayVersion" "${PRODUCT_VERSION}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\cjdns" "DisplayIcon" "$INSTDIR\logo.ico"
+	
+	ExecShell "" "$INSTDIR\${PRODUCT_SHORT_NAME}.exe"
 SectionEnd
 
 Section "Add public peers when generating config"
@@ -185,6 +192,10 @@ Section "Install cjdns service"
 	SimpleSC::InstallService "cjdns" "cjdns Mesh Network Router" "16" "3" "$INSTDIR\CjdnsService.exe" "" "" ""
 SectionEnd
 
+Section "Install CJDNS service monitor"
+	CreateShortCut "$SMSTARTUP\CJDNS.lnk" "$INSTDIR\cjdns.exe" ""
+SectionEnd
+
 Section "Apply DNS patch"
 	# Be in the right directory
 	SetOutPath "$INSTDIR"
@@ -212,7 +223,7 @@ SectionEnd
 
 Section "Display instructions"
 	# Send the user to our web page where we talk about how to actually use cjdns
-	ExecShell "open" "https://github.com/interfect/cjdns-installer/blob/master/Users%20Guide.md"
+	ExecShell "open" "https://github.com/vikulin/cjdns-installer/blob/master/Users%20Guide.md"
 SectionEnd
 
 Section "un.Uninstall cjdns"
@@ -245,6 +256,8 @@ Section "un.Uninstall cjdns"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Test cjdns connectivity.lnk"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Apply DNS patch.lnk"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Revert DNS patch.lnk"
+	Delete "$SMSTARTUP\${PRODUCT_SHORT_NAME}.lnk"
+	Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_SHORT_NAME}.lnk"
 
 	# Delete the start menu folder
 	RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
@@ -270,7 +283,10 @@ Section "un.Uninstall cjdns"
 	Delete "$INSTDIR\addPublicPeers.vbs"
 	Delete "$INSTDIR\invisible.vbs"
 	Delete "$INSTDIR\logo.ico"
-
+	Delete "$INSTDIR\cjdns.exe"
+	Delete "$INSTDIR\service_controller.exe"
+	Delete "$INSTDIR\Newtonsoft.Json.dll"
+	
 	# Remove the dependencies directory
 	RMDir /r "$INSTDIR\dependencies"
 
