@@ -8,7 +8,7 @@
 
 !define PRODUCT_NAME "CJDNS"
 !define PRODUCT_SHORT_NAME "CJDNS"
-!define PRODUCT_VERSION "1.0.1-proto20.4"
+!define PRODUCT_VERSION "1.0.2-proto20.4"
 !define PRODUCT_PUBLISHER "Santa Cruz Meshnet Project"
 
 # NSIS Dependencies
