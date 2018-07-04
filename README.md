@@ -40,4 +40,4 @@ To re-build cjdns itself, produce your favorite cjdns build for Windows, and rep
 
 The installer will, by default, install a TAP driver, cjdns, and a Windows service that starts cjdns on boot. It will generate a configuration file at `C:\Program Files (x86)\cjdns\cjdroute.conf`, or wherever you installed it to, and then start cjdns.
 
-To configure cjdns, edit that configuration file, and then issue `net stop cjdns` and `net start cjdns` as administrator (or just reboot).
+To configure cjdns, use cjdns service monitor running it in systray and click Stop-Start menu to appply changes.
