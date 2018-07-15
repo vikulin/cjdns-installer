@@ -7,7 +7,9 @@
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "sidebar.bmp"
 
 !define PRODUCT_NAME "CJDNS"
-!define PRODUCT_SHORT_NAME "CJDNS"
+!define PRODUCT_SHORT_NAME "cjdns"
+!define WND_TITLE "CJDNS"
+!define SYNC_TERM 0x00100001
 !define PRODUCT_VERSION "1.0.3-proto20.4"
 !define PRODUCT_PUBLISHER "Santa Cruz Meshnet Project"
 
@@ -24,6 +26,24 @@
 # What is the installer called?
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "cjdns-installer-${PRODUCT_VERSION}.exe"
+
+!macro TerminateApp
+ 
+    Push $0 ; window handle
+    Push $1
+    Push $2 ; process handle
+    FindWindow $0 '' '${WND_TITLE}'
+    IntCmp $0 0 done
+    System::Call 'user32.dll::GetWindowThreadProcessId(i r0, *i .r1) i .r2'
+    System::Call 'kernel32.dll::OpenProcess(i ${SYNC_TERM}, i 0, i r1) i .r2'
+    System::Call 'kernel32.dll::TerminateProcess(i r2, i 0) i .r1'
+  done:
+    Pop $2
+    Pop $1
+    Pop $0
+ 
+!macroend
+
 ShowInstDetails show
 
 # Where do we want to install to?
@@ -111,7 +131,7 @@ Section "Install cjdns"
 	# Add a shortcut to the uninstaller
 	CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
 	CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall cjdns.lnk" "$INSTDIR\uninstall.exe"
-	CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_SHORT_NAME}.lnk" "$INSTDIR\cjdns.exe"
+	CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\cjdns.exe"
 
 	# Add a tool and shortcut to edit the config
 	File "installation\edit_config.cmd"
@@ -151,16 +171,17 @@ SectionEnd
 
 Section "Add public peers when generating config"
 	# Be in the right directory
-	SetOutPath "$INSTDIR"
+	SetOutPath "$APPDATA\${PRODUCT_SHORT_NAME}"
 
 	# Add these files
 	File "installation\public_peers.txt"
-	File "installation\addPublicPeers.vbs"
+	
 SectionEnd
 
 Section "Generate cjdns configuration if needed"
 	# Be in the right directory
 	SetOutPath "$INSTDIR"
+	File "installation\addPublicPeers.vbs"
 	# Make cjdns config file if it doesn't exist
 	ExecWait "C:\Windows\System32\wscript.exe invisible.vbs genconf.cmd"
 SectionEnd
@@ -231,7 +252,10 @@ Section "un.Uninstall cjdns"
 
 	# Uninstall shell stuff for everyone
 	SetShellVarContext all
-
+    
+	#Close app
+	!insertmacro TerminateApp
+	
 	# Stop the service
 	SimpleSC::StopService "cjdns" 1 30
 
@@ -256,8 +280,8 @@ Section "un.Uninstall cjdns"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Test cjdns connectivity.lnk"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Apply DNS patch.lnk"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Revert DNS patch.lnk"
-	Delete "$SMSTARTUP\${PRODUCT_SHORT_NAME}.lnk"
-	Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_SHORT_NAME}.lnk"
+	Delete "$SMSTARTUP\${PRODUCT_NAME}.lnk"
+	Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk"
 
 	# Delete the start menu folder
 	RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
@@ -279,7 +303,7 @@ Section "un.Uninstall cjdns"
 	Delete "$INSTDIR\edit_config.cmd"
 	Delete "$INSTDIR\dns_patch.cmd"
 	Delete "$INSTDIR\dns_unpatch.cmd"
-	Delete "$INSTDIR\public_peers.txt"
+	Delete "$APPDATA\${PRODUCT_SHORT_NAME}\public_peers.txt"
 	Delete "$INSTDIR\addPublicPeers.vbs"
 	Delete "$INSTDIR\invisible.vbs"
 	Delete "$INSTDIR\logo.ico"
@@ -299,7 +323,7 @@ SectionEnd
 
 Section "un.Remove cjdns configuration"
 	# Delete the config if it exists
-	Delete "$INSTDIR\cjdroute.conf"
+	Delete "$APPDATA\${PRODUCT_SHORT_NAME}\cjdroute.conf"
 
 	# Delete the install directory, if empty
 	RMDir "$INSTDIR"

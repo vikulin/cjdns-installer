@@ -4,12 +4,12 @@
                     // Please remove them as soon as you can get some real peers.               //
                     //////////////////////////////////////////////////////////////////////////////
 
-"104.200.29.163:53053":{
-  "password":"0YUg6eJ06NHUCMZexLj2F2cGjeENgX3",
-  "publicKey":"1941p5k8qqvj17vjrkb9z97wscvtgc1vp8pv1huk5120cu42ytt0.k",
-  "contact":"ansuz@transitiontech.ca",
-  "location":"Newark,NJ,USA"
-}
+                    "104.200.29.163:53053":{
+                      "password":"0YUg6eJ06NHUCMZexLj2F2cGjeENgX3",
+                      "publicKey":"1941p5k8qqvj17vjrkb9z97wscvtgc1vp8pv1huk5120cu42ytt0.k",
+                      "contact":"ansuz@transitiontech.ca",
+                      "location":"Newark,NJ,USA"
+                    }
                     //////////////////////////////////////////////////////////////////////////////
                     // End public access peers                                                  //
                     //////////////////////////////////////////////////////////////////////////////

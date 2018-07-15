@@ -48,7 +48,7 @@ public class CjdnsService: ServiceBase {
         cjdns.Start();
 
         // Dump in the config file
-        cjdns.StandardInput.WriteLine(System.IO.File.ReadAllText("cjdroute.conf"));
+        cjdns.StandardInput.WriteLine(System.IO.File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) +"\\cjdns\\cjdroute.conf"));
         
         // Close up the stream and let the process run.
         cjdns.StandardInput.Close();

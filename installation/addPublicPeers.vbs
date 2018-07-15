@@ -4,9 +4,14 @@ Set fso = CreateObject("Scripting.FileSystemObject")
 ' Get the full path to us and our config files
 root = fso.GetParentFolderName(WScript.ScriptFullName)
 
-source_file = "cjdroute.conf"
-temp_file = "cjdroute.tmp"
-peer_file = "public_peers.txt"
+Const CommonAppData = &H23&  ' the second & denotes a long integer '
+Set objShell  = CreateObject("Shell.Application")
+Set objFolder = objShell.Namespace(CommonAppData)
+Set objFolderItem = objFolder.Self
+
+source_file = objFolderItem.Path & "\cjdns\cjdroute.conf"
+temp_file = objFolderItem.Path & "\cjdns\cjdroute.tmp"
+peer_file = objFolderItem.Path & "\cjdns\public_peers.txt"
 
 set in_stream = fso.OpenTextFile(source_file)
 ' Make a temp file, clobbering any already there
