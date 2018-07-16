@@ -10,7 +10,7 @@
 !define PRODUCT_SHORT_NAME "cjdns"
 !define WND_TITLE "CJDNS"
 !define SYNC_TERM 0x00100001
-!define PRODUCT_VERSION "1.0.3-proto20.4"
+!define PRODUCT_VERSION "1.0.4-proto20.4"
 !define PRODUCT_PUBLISHER "Santa Cruz Meshnet Project"
 
 # NSIS Dependencies
@@ -120,6 +120,7 @@ Section "Install cjdns"
 	File "installation\logo.ico"
 	File "installation\cjdns.exe"
 	File "installation\service_controller.exe"
+	File "installation\cjdns_config.exe"
 	File "installation\Newtonsoft.Json.dll"
 	
 	# create the uninstaller
@@ -309,6 +310,7 @@ Section "un.Uninstall cjdns"
 	Delete "$INSTDIR\logo.ico"
 	Delete "$INSTDIR\cjdns.exe"
 	Delete "$INSTDIR\service_controller.exe"
+	Delete "$INSTDIR\cjdns_config.exe"
 	Delete "$INSTDIR\Newtonsoft.Json.dll"
 	
 	# Remove the dependencies directory
